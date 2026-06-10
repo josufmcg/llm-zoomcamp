@@ -1,0 +1,26 @@
+[project]
+name = "llm-zoomcamp"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "jupyter>=1.1.1",
+    "minsearch>=0.0.11",
+    "numpy>=2.4.5",
+    "onnxruntime>=1.26.0",
+    "openai>=2.37.0",
+    "psycopg[binary]>=3.3.4",
+    "python-dotenv>=1.2.2",
+    "requests>=2.34.2",
+    "sentence-transformers>=5.5.1",
+    "sqlitesearch>=0.0.4",
+    "tokenizers>=0.22.2",
+    "tqdm>=4.67.3",
+]
+
+[dependency-groups]
+dev = [
+    "huggingface-hub>=1.16.1",
+    "jupyter>=1.1.1",
+]
