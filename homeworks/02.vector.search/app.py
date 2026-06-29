@@ -82,3 +82,40 @@ vector_results = list(unique_results)
 
 print(f"Q5 - Vector search results: \n {[doc for doc in vector_results]}")
 print(f"Q5 - Search differences: {list(set([doc for doc in vector_results]) - set([doc['filename'] for doc in text_results]))}")
+
+# Q6. Hybrid search
+q6_query = "How do I give the model access to tools?"
+tindex = Index(
+    text_fields=['content'],
+    keyword_fields=['filename']
+)
+tindex.fit(documents)
+text_results = tindex.search(q6_query, num_results=5)
+print(f"Q6 - Text search results: \n {[doc['filename'] for doc in text_results]}")
+
+q6_vector = embedder.encode(q6_query)
+vector_search_results = vindex.search(q6_vector, num_results=50)
+unique_results = set()
+vector_results = []
+for doc in vector_search_results:
+    if doc['filename'] not in unique_results:
+        unique_results.add(doc['filename'])
+        vector_results.append(doc)
+    if len(unique_results) >= 5:
+        break
+
+def rrf(result_lists, k=60, num_results=5):
+    scores = {}
+    docs = {}
+
+    for results in result_lists:
+        for rank, doc in enumerate(results):
+            key = (doc["filename"],)
+            scores[key] = scores.get(key, 0) + 1 / (k + rank)
+            docs[key] = doc
+
+    ranked = sorted(scores, key=scores.get, reverse=True)
+    return [docs[key] for key in ranked[:num_results]]
+
+results = rrf([vector_results, text_results])
+print(f"Q6 - Hybrid search results: \n {[doc['filename'] for doc in results]}")
