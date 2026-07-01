@@ -1,5 +1,7 @@
 .venv/
 .env
+.env_encoded
+credentials.json
 __pycache__/
 *.pyc
 
